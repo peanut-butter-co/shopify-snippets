@@ -1,0 +1,31 @@
+[
+  {
+    "name": "Breadcrumbs",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "breadcrumbs_enabled",
+        "label": "Enable breadcrumbs",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "breadcrumbs_separator",
+        "label": "Separator",
+        "default": "/"
+      },
+      {
+        "type": "textarea",
+        "id": "breadcrumbs_excluded_paths",
+        "label": "Excluded paths",
+        "info": "Enter the paths you want to exclude from breadcrumbs. Separate them with commas."
+      },
+      {
+        "type": "link_list",
+        "id": "breadcrumbs_menu",
+        "label": "Menu",
+        "info": "Select menu to show breadcrumbs"
+      }
+    ]
+  }
+]

@@ -1,0 +1,121 @@
+{%- liquid 
+  assign breadcrumbs_collection = product.metafields.custom.main_category.value.handle
+  assign finished = false
+  assign highest_level = 1 
+  assign menu = settings.breadcrumbs_menu
+-%}
+
+{%- unless breadcrumbs_collection == blank -%}
+  {%- comment -%}
+    LEVEL 1
+  {%- endcomment -%}
+
+  {% for link_level_1 in linklists[menu].links %}
+    {%- comment -%}
+      If link is not a collection we can skip this menu item as product breadcrumbs will be composed by collections
+    {%- endcomment -%}
+    {%- if finished or link_level_1.type != 'collection_link' -%}
+      {%- continue -%}
+    {%- endif -%}
+      {%- capture breadcrumbs_level_1 -%}
+        <a class="breadcrumbs__item" href="{{ link_level_1.url }}">
+        {{ link_level_1.title | escape }}  
+        </a>
+      {%- endcapture -%}
+
+      {%- if link_level_1.object.handle == breadcrumbs_collection -%}
+        {%- assign finished = true -%}
+        {% break %}
+      {%- endif -%}
+
+      {%- comment -%}
+        LEVEL 2
+      {%- endcomment -%}
+      {% for link_level_2 in link_level_1.links %}
+        {%- if finished -%}
+          {%- continue -%}
+        {%- endif -%}
+
+        {%- capture breadcrumbs_level_2 -%}
+          <a class="breadcrumbs__item" href="{{ link_level_2.url }}">
+          {{ link_level_2.title | escape }} 
+          </a>
+        {%- endcapture -%}
+
+        {%- if link_level_2.object.handle == breadcrumbs_collection -%}
+          
+          {%- assign finished = true -%}
+          {%- assign highest_level = 2 -%}
+          {% break %}
+        {%- endif -%}
+
+        {%- comment -%}
+          LEVEL 3
+        {%- endcomment -%}
+        
+        {% for link_level_3 in link_level_2.links %}
+          
+          {%- if finished -%}
+            {%- continue -%}
+          {%- endif -%}
+          
+          {%- capture breadcrumbs_level_3 -%}
+            <a class="breadcrumbs__item" href="{{ link_level_3.url }}">
+            {{ link_level_3.title | escape }} 
+            </a>
+          {%- endcapture -%}
+          {%- if link_level_3.object.handle == breadcrumbs_collection -%}
+            {%- assign finished = true -%}
+            {%- assign highest_level = 3 -%}
+            {% break %}
+          {%- endif -%}
+
+          {%- comment -%}
+            LEVEL 4
+          {%- endcomment -%}
+          {% for link_level_4 in link_level_3.links %}
+
+              {%- if finished -%}
+                {%- continue -%}
+              {%- endif -%}
+            
+              {%- capture breadcrumbs_level_4 -%}
+                <a class="breadcrumbs__item" href="{{ link_level_4.url }}">
+                {{ link_level_4.title | escape }} 
+                </a>
+              {%- endcapture -%}
+
+              {%- if link_level_4.object.handle == breadcrumbs_collection -%}
+                
+                {%- assign finished = true -%}
+                {%- assign highest_level = 4 -%}
+                {% break %}
+              {%- endif -%}
+            
+          {%- endfor -%}
+        {%- endfor -%}
+        
+      {%- endfor -%}
+  {%- endfor -%}
+
+  {%- if finished -%}
+    {% unless breadcrumbs_level_1 == blank %}<span class="breadcrumbs__separator">{{ settings.breadcrumbs_separator }}</span>{% endunless %} 
+    {{ breadcrumbs_level_1 }}
+    
+    {%- if highest_level >= 2 -%}
+      {% unless breadcrumbs_level_2 == blank %}<span class="breadcrumbs__separator">{{ settings.breadcrumbs_separator }}</span>{% endunless %} 
+      {{ breadcrumbs_level_2 }}
+    {%- endif -%}
+
+    {%- if highest_level >= 3 -%}
+      {% unless breadcrumbs_level_3 == blank %}<span class="breadcrumbs__separator">{{ settings.breadcrumbs_separator }}</span>{% endunless %} 
+      {{ breadcrumbs_level_3 }}
+    {%- endif -%}
+    
+    {%- if highest_level >= 4 -%}
+      {% unless breadcrumbs_level_4 == blank %}<span class="breadcrumbs__separator">{{ settings.breadcrumbs_separator }}</span>{% endunless %} 
+      {{ breadcrumbs_level_4 }}
+    {%- endif -%}
+  {% endif %}
+
+{%- endunless -%}

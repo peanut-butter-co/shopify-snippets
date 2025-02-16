@@ -1,0 +1,43 @@
+{%- liquid
+  assign show_breadcrumbs = true 
+  assign excluded_paths = settings.breadcrumbs_excluded_paths | split: ","
+  for path in excluded_paths
+    if request.path contains path
+      assign show_breadcrumbs = false 
+      break
+    endif
+  endfor
+-%}
+
+{%- unless show_breadcrumbs == false or settings.breadcrumbs_enabled == false -%}
+  {% render 'vite-tag' with 'breadcrumbs.scss' %}
+  
+  <div class="breadcrumbs">
+    <a href="{{ routes.root_url }}" title="{{ 'general.breadcrumbs.home' | t }}" class="breadcrumbs__item">
+      <span>
+        {{ 'general.breadcrumbs.home' | t }}
+      </span>
+    </a>
+    {% assign this_template = template | split: '.' | first %}
+
+    {%- if this_template == 'blog' -%}
+      <span class="breadcrumbs__separator">{{ settings.breadcrumbs_separator }}</span>
+      <span class="breadcrumbs__item breadcrumbs__item--active">
+        {{ blog.title }}  
+      </span>
+    {%- elsif this_template == 'article' -%}
+      <span class="breadcrumbs__separator">{{ settings.breadcrumbs_separator }}</span>
+      <a class="breadcrumbs__item" href="{{ blog.url }}">
+        {{ blog.title }}  
+      </a>
+      <span class="breadcrumbs__separator">{{ settings.breadcrumbs_separator }}</span>
+      <span class="breadcrumbs__item breadcrumbs__item--active">
+        {{ article.title | escape }}  
+      </span>
+    {%- elsif this_template != 'product' or request.path contains '/collections/' -%}
+      {% render 'breadcrumbs-link-active', section: section %}
+    {%- else -%}
+      {% render 'breadcrumbs-metafield', section: section %}
+    {%- endif -%}
+  </div>
+{%- endunless -%}

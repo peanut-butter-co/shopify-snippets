@@ -1,0 +1,117 @@
+{%- assign deepest_level = 0 -%}
+{%- comment -%}
+  LEVEL 1
+{%- endcomment -%}
+{% assign menu = settings.breadcrumbs_menu %}
+{% for link_level_1 in linklists[menu].links %}
+  {% if link_level_1.child_active or link_level_1.active %}
+    {%- capture breadcrumbs_level_1 -%}
+      <a class="breadcrumbs__item" href="{{ link_level_1.url }}">
+      {{ link_level_1.title | escape }}  
+      </a>
+    {%- endcapture -%}
+    {%- capture breadcrumbs_level_1_no_link -%}
+      <span class="breadcrumbs__item breadcrumbs__item--active">
+        {{ link_level_1.title | escape }}  
+      </span>
+    {%- endcapture -%}
+    {%- assign deepest_level = 1 -%}
+
+    {%- comment -%}
+      LEVEL 2
+    {%- endcomment -%}
+    {% for link_level_2 in link_level_1.links %}
+      {% if link_level_2.child_active or link_level_2.active %}
+        {%- capture breadcrumbs_level_2 -%}
+          <a class="breadcrumbs__item" href="{{ link_level_2.url }}">
+          {{ link_level_2.title | escape }} 
+          </a>
+        {%- endcapture -%}
+        {%- capture breadcrumbs_level_2_no_link -%}
+          <span class="breadcrumbs__item breadcrumbs__item--active">
+            {{ link_level_2.title | escape }}  
+          </span>
+        {%- endcapture -%}
+        {%- assign deepest_level = 2 -%}
+
+        {%- comment -%}
+          LEVEL 3
+        {%- endcomment -%}
+        {% for link_level_3 in link_level_2.links %}
+          {% if link_level_3.child_active or link_level_3.active %}
+            {%- capture breadcrumbs_level_3 -%}
+              <a class="breadcrumbs__item" href="{{ link_level_3.url }}">
+              {{ link_level_3.title | escape }} 
+              </a>
+            {%- endcapture -%}
+            {%- capture breadcrumbs_level_3_no_link -%}
+              <span class="breadcrumbs__item breadcrumbs__item--active">
+                {{ link_level_3.title | escape }}  
+              </span>
+            {%- endcapture -%}
+            {%- assign deepest_level = 3 -%}
+            {%- comment -%}
+              LEVEL 4
+            {%- endcomment -%}
+            {% for link_level_4 in link_level_3.links %}
+              {% if link_level_4.child_active or link_level_4.active %}
+                {%- capture breadcrumbs_level_4 -%}
+                  <a class="breadcrumbs__item" href="{{ link_level_4.url }}">
+                  {{ link_level_4.title | escape }} 
+                  </a>
+                {%- endcapture -%}
+                {%- capture breadcrumbs_level_4_no_link -%}
+                  <span class="breadcrumbs__item breadcrumbs__item--active">
+                    {{ link_level_4.title | escape }}  
+                  </span>
+                {%- endcapture -%}
+                {%- assign deepest_level = 4 -%}
+              {% endif %}
+            {%- endfor -%}
+          {% endif %}
+        {%- endfor -%}
+      {% endif %}
+    {%- endfor -%}
+  {% endif %}
+{%- endfor -%}
+
+{%- comment -%}
+  Render Breadcrumbs
+{%- endcomment -%}
+{% unless breadcrumbs_level_1 == blank %}
+  <span class="breadcrumbs__separator">{{ settings.breadcrumbs_separator }}</span>
+{% endunless %}
+{%- if deepest_level == 1 and template != 'product' -%}
+  {{ breadcrumbs_level_1_no_link }}
+{%- else -%}
+  {{ breadcrumbs_level_1 }}
+{%- endif -%}
+
+{% unless breadcrumbs_level_2 == blank %}
+  <span class="breadcrumbs__separator">{{ settings.breadcrumbs_separator }}</span>
+{% endunless %} 
+{%- if deepest_level == 2 and template != 'product' -%}
+  {{ breadcrumbs_level_2_no_link }}
+{%- else -%}
+  {{ breadcrumbs_level_2 }}
+{%- endif -%}
+
+{% unless breadcrumbs_level_3 == blank %}
+  <span class="breadcrumbs__separator">
+    {{ settings.breadcrumbs_separator }}
+  </span>
+{% endunless %} 
+{%- if deepest_level == 3 and template != 'product' -%}
+  {{ breadcrumbs_level_3_no_link }}
+{%- else -%}
+  {{ breadcrumbs_level_3 }}
+{%- endif -%}
+
+{% unless breadcrumbs_level_4 == blank %}
+  <span class="breadcrumbs__separator">{{ settings.breadcrumbs_separator }}</span>
+{% endunless %} 
+{%- if deepest_level == 4 and template != 'product' -%}
+  {{ breadcrumbs_level_4_no_link }}
+{%- else -%}
+  {{ breadcrumbs_level_4 }}
+{%- endif -%}

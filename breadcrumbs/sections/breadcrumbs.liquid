@@ -1,0 +1,26 @@
+<div class="breadcrumbs--{{ section.id }} breadcrumbs__wrapper">
+  {%- render 'breadcrumbs' %}
+</div>
+
+<style>
+  .breadcrumbs--{{ section.id }} {
+    {%- if section.settings.background_color -%}
+      --breadcrumbs-bg-color: {{ section.settings.background_color }};
+    {%- endif -%}
+
+    --breadcrumbs-text-color: var(--color-{{ section.settings.text_color }});
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Breadcrumbs",
+  "class": "section-breadcrumbs",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Breadcrumbs"
+    }
+  ]
+}
+{% endschema %}
