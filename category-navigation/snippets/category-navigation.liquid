@@ -1,0 +1,140 @@
+{%- comment -%}
+  LEVEL 1
+{%- endcomment -%}
+{% liquid
+    assign menu = section.settings["menu"]
+    assign found = false
+    assign childs_menu = ''
+    assign siblings_menu = ''
+%}
+
+{% for link_level_1 in linklists[menu].links %}
+  {%- comment -%}if subtree has been found then we can exit the loop{%- endcomment -%}
+  {%- if found -%}
+    {% break %}
+  {%- endif -%}
+  {% if link_level_1.child_active or link_level_1.active %}
+    {%- if link_level_1.active -%}
+      {%- assign current_level = 1 -%}
+      {%- comment -%}
+        This is the current category
+        If this item has childs then we show them
+      {%- endcomment -%}
+      {%- assign child_count = link_level_1.links | size -%}
+      {%- if child_count > 0 -%}
+        {%- capture childs_menu -%}
+          {%- render 'category-navigation-items', parent: link_level_1, view_all_position: section.settings.view_all_position, hide_view_all: section.settings.hide_view_all -%}
+        {%- endcapture -%}
+      {%- endif -%}
+      {%- comment -%}Set found as true so we can break out of all loops{%- endcomment -%}
+      {%- assign found = true -%}
+      {% break %}
+    {%- comment -%}We store the parent's childs in case we have to show the siblings{%- endcomment -%}
+    {%- elsif section.settings.show_siblings and link_level_1.child_active -%}
+      {%- capture siblings_menu -%}
+        {%- render 'category-navigation-items', parent: link_level_1, view_all_position: section.settings.view_all_position, hide_view_all: section.settings.hide_view_all -%}
+      {%- endcapture -%}
+    {%- endif -%}
+
+    {%- comment -%}
+      LEVEL 2
+    {%- endcomment -%}
+    {% for link_level_2 in link_level_1.links %}
+      {%- comment -%}if subtree has been found then we can exit the loop{%- endcomment -%}
+      {%- if found -%}
+        {% break %}
+      {%- endif -%}
+      {% if link_level_2.child_active or link_level_2.active %}
+        {%- if link_level_2.active -%}
+          {%- assign current_level = 2 -%}
+          {%- comment -%}
+            This is the current category
+            If this item has childs then we show them
+          {%- endcomment -%}
+          {%- assign child_count = link_level_2.links | size -%}
+          {%- if child_count > 0 -%}
+            {%- capture childs_menu -%}
+              {%- render 'category-navigation-items', parent: link_level_2, view_all_position: section.settings.view_all_position, hide_view_all: section.settings.hide_view_all -%}
+            {%- endcapture -%}
+          {%- endif -%}
+          {%- comment -%}Set found as true so we can break out of all loops{%- endcomment -%}
+          {%- assign found = true -%}
+          {% break %}
+        {%- comment -%}We store the parent's childs in case we have to show the siblings{%- endcomment -%}
+        {%- elsif section.settings.show_siblings and link_level_2.child_active -%}
+          {%- capture siblings_menu -%}
+            {%- render 'category-navigation-items', parent: link_level_2, view_all_position: section.settings.view_all_position, hide_view_all: section.settings.hide_view_all -%}
+          {%- endcapture -%}
+        {%- endif -%}
+    
+        {%- comment -%}
+          LEVEL 3
+        {%- endcomment -%}
+        {% for link_level_3 in link_level_2.links %}
+          {%- comment -%}
+            This is the current category
+            If this item has childs then we show them
+          {%- endcomment -%}
+          {%- if found -%}
+            {% break %}
+          {%- endif -%}
+          {% if link_level_3.child_active or link_level_3.active %}
+            {%- if link_level_3.active -%}
+              {%- assign current_level = 3 -%}
+              {%- comment -%}This is the current category{%- endcomment -%}
+              {%- assign child_count = link_level_3.links | size -%}
+              {%- if child_count > 0 -%}
+                {%- capture childs_menu -%}
+                  {%- render 'category-navigation-items', parent: link_level_3, view_all_position: section.settings.view_all_position, hide_view_all: section.settings.hide_view_all -%}
+                {%- endcapture -%}
+              {%- endif -%}
+              {%- comment -%}Set found as true so we can break out of all loops{%- endcomment -%}
+              {%- assign found = true -%}
+              {% break %}
+            {%- comment -%}We store the parent's childs in case we have to show the siblings{%- endcomment -%}
+            {%- elsif section.settings.show_siblings and link_level_3.child_active -%}
+              {%- capture siblings_menu -%}
+                {%- render 'category-navigation-items', parent: link_level_3, view_all_position: section.settings.view_all_position, hide_view_all: section.settings.hide_view_all -%}
+              {%- endcapture -%}
+            {%- endif -%}
+
+            {%- comment -%}
+              LEVEL 4
+            {%- endcomment -%}
+            {% for link_level_4 in link_level_3.links %}
+              {% if link_level_4.child_active or link_level_4.active %}
+                {%- if link_level_4.active -%}
+                  {%- assign current_level = 4 -%}
+                  {%- comment -%}
+                    This is the current category
+                    If this item has childs then we show them
+                  {%- endcomment -%}
+                  {%- assign child_count = link_level_4.links | size -%}
+                  {%- if child_count > 0 -%}
+                    {%- capture childs_menu -%}
+                      {%- render 'category-navigation-items', parent: link_level_4, view_all_position: section.settings.view_all_position, hide_view_all: section.settings.hide_view_all -%}
+                    {%- endcapture -%}
+                  {%- endif -%}
+                  {%- comment -%}Set found as true so we can break out of all loops{%- endcomment -%}
+                  {%- assign found = true -%}
+                  {% break %}
+                {%- comment -%}We store the parent's childs in case we have to show the siblings{%- endcomment -%}
+                {%- elsif section.settings.show_siblings and link_level_4.child_active -%}
+                  {%- capture siblings_menu -%}
+                    {%- render 'category-navigation-items', parent: link_level_4, view_all_position: section.settings.view_all_position, hide_view_all: section.settings.hide_view_all -%}
+                  {%- endcapture -%}
+                {%- endif -%}
+              {% endif %}
+            {%- endfor -%}
+          {% endif %}
+        {%- endfor -%}
+      {% endif %}
+    {%- endfor -%}
+  {% endif %}
+{%- endfor -%}
+
+{%- if childs_menu != '' -%}
+  {{ childs_menu }}
+{%- elsif siblings_menu != blank and current_level > 1 -%}
+  {{ siblings_menu }}
+{%- endif -%}
