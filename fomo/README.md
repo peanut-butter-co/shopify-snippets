@@ -114,13 +114,6 @@ The snippet automatically:
 - Renders a custom element `<fomo-message>` with the configured message
 - Updates the block every 5 seconds using JavaScript to ensure the displayed sales data is current
 
-Example usage in theme:
-```liquid
-{% section 'fomo-sales' %}
-```
-
-The message is rendered through a JavaScript component (`fomo-message.js`) that handles the dynamic display and updates.
-
 ## Limitations
 
 - Sales data is rounded to 15-minute intervals
