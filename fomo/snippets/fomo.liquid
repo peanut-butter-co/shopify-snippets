@@ -1,0 +1,45 @@
+{%- liquid
+  assign render_mode = block.settings.render_mode
+  if render_mode == 'sales_array'
+    assign total_sales = 0
+    comment
+      Modify hours_shown to get sales from the last X hours
+      This has to be modified also in the associated Shopify Flow
+    endcomment
+    assign hours_shown = 24
+    assign offset_in_seconds = hours_shown | times: 60 | times: 60
+    assign date_time_limit = 'now' | date: "%s" | minus: offset_in_seconds | date: "%Y%m%d%H%M" | plus: 0
+    for sale in product.metafields.fomo.sales.value
+      assign sale_date = sale.date | plus: 0
+      comment
+        Sales are sorted by date from newest to oldest.
+        If the sale date is older than 24 hours, we break the loop as following sales will be older.
+      endcomment
+      if sale_date < date_time_limit
+        break
+      endif
+      assign total_sales = total_sales | plus: sale.quantity
+    endfor
+  else
+    assign total_sales = product.metafields.fomo.total_units_sold | plus: 0
+  endif
+  if block.settings.increase_by != blank
+    assign increase_amount = total_sales | times: block.settings.increase_by | divided_by: 100.0 | round
+    assign total_sales = total_sales | plus: increase_amount
+  endif
+-%}
+{%- if block.settings.minimum_sales == blank or total_sales >= block.settings.minimum_sales -%}
+  <script src="{{ 'fomo-message.js' | asset_url }}" defer="defer"></script>
+  <fomo-message
+    class="c-product__fomo"
+    data-product-id="{{ product.id }}"
+    data-section-id="{{ section.id }}"
+    data-total-sales="{{ total_sales }}"
+    data-increase-by="{{ block.settings.increase_by }}"
+    {{ block.shopify_attributes }}
+  >
+    <span id="fomo-{{ section.id }}">
+      {{ block.settings.message | replace: '[total_sales]', total_sales }}
+    </span>
+  </fomo-message>
+{%- endif -%}

@@ -1,0 +1,59 @@
+{% for block in section.blocks %}
+  {%- case block.type -%}
+    {%- when 'fomo' -%}
+      {%- render 'fomo', product: product, block: block -%}
+  {%- endcase -%}
+{% endfor %}
+
+
+{% schema %}
+{
+  "name": "Product information",
+  "tag": "section",
+  "class": "product-section",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "fomo",
+      "name": "FOMO Message",
+      "settings": [
+        {
+          "type": "text",
+          "id": "message",
+          "label": "Message",
+          "default": "[total_sales] made in the last 24h",
+          "info": "Use [total_sales] to show the total sales"
+        },
+        {
+          "type": "number",
+          "id": "increase_by",
+          "label": "Increase sales by percentage",
+          "info": "Optional. Enter a percentage to increase the displayed sales number (e.g., 20 for 20%)",
+          "placeholder": "e.g., 20"
+        },
+        {
+          "type": "number",
+          "id": "minimum_sales",
+          "label": "Minimum sales to show",
+          "info": "Optional. Block will only show if total sales are above this number",
+          "placeholder": "e.g., 20"
+        },
+        {
+          "type": "select",
+          "id": "render_mode",
+          "label": "Render mode",
+          "default": "sales_array",
+          "info": "'Loop sales' is more precise as loops all sales for the product. 'Use total' is more performant as it, but less precise as it uses fomo.total_units_sold which is only updated when a orders are placed.",
+          "options": [
+            { "value": "sales_array", "label": "Loop sales" },
+            { "value": "total", "label": "Use total" }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
