@@ -1,0 +1,46 @@
+---
+description: Shopify Theme Assets Rules — SSR-first JS/CSS, integration with Liquid, and safe theme-editor behavior.
+globs:
+  - assets/*.*
+  - assets/*/*.*
+alwaysApply: false
+---
+
+<shopify_theme_assets>
+
+  <scope>
+    - These rules apply to files in /assets only.
+    - Do not apply Liquid whitelist constraints when editing assets.
+    - When changes affect Liquid and assets, coordinate changes across both files and keep Shopify SSR-first principles.
+  </scope>
+
+  <integration_with_liquid>
+    - Reference assets via Liquid helpers:
+      - Prefer {{ 'file.js' | script_tag }} and {{ 'file.css' | stylesheet_tag }} where appropriate
+      - Use {{ 'file.ext' | asset_url }} for URLs
+      - Use inline_asset_content only when there is a clear reason (e.g. critical CSS / small snippets)
+    - Prefer server-rendered HTML (Liquid) as the source of truth.
+    - If JS needs HTML, prefer fetching HTML rendered by the server (sections/snippets) instead of building large HTML strings in JS.
+  </integration_with_liquid>
+
+  <server_side_rendering_first>
+    - Default to SSR with Liquid; JS enhances.
+    - Use optimistic UI only for small, high-certainty updates (e.g. cart count), and reconcile with server response.
+  </server_side_rendering_first>
+
+  <theme_editor_safety>
+    - JS must be idempotent:
+      - Safe to run multiple times without duplicating listeners or DOM
+      - Safe when sections are re-rendered / moved in the Theme Editor
+    - Prefer patterns that survive re-render:
+      - Custom elements / event-driven communication
+      - Re-query DOM on connect / section load events if applicable
+  </theme_editor_safety>
+
+  <performance_and_dependencies>
+    - Minimize dependencies; prefer native browser APIs.
+    - Avoid global pollution; scope code to modules/components.
+    - Avoid heavy client-side rendering when Liquid can do it.
+  </performance_and_dependencies>
+
+</shopify_theme_assets>
