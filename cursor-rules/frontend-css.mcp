@@ -56,15 +56,6 @@ alwaysApply: false
       - ❌ .text-small-red
   </naming_conventions>
 
-  <nesting>
-    - Avoid nesting beyond 1 level in SCSS.
-    - Never use the "&" operator.
-    - Exceptions allowed:
-      - Media queries can be nested inside the component block.
-      - Parent state affecting child (keep readable and minimal).
-    - Prefer flat selectors over nested selector chains.
-  </nesting>
-
   <media_queries>
     - Mobile-first: use min-width queries by default.
     - Use "screen" for media queries.
