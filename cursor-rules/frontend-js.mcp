@@ -1,0 +1,163 @@
+---
+description: Frontend JS Rules — Peanut Butter standards for Shopify themes (Vanilla JS + Web Components).
+globs:
+  - assets/*.js
+  - assets/*/*.js
+  - src/**/*.js
+  - src/**/*.ts
+alwaysApply: false
+---
+
+<frontend_javascript>
+
+  <general_principles>
+    - Lean towards using zero external dependencies.
+    - Use JavaScript only when needed; reach for native browser features first (e.g. <details>/<summary>, popover).
+    - Do not use "var".
+    - Prefer "const" over "let" — avoid mutation unless necessary.
+    - Prefer "for (const item of items)" over "items.forEach(...)"
+    - Put new lines before new "blocks" of code. A block is anything with a "{" and "}".
+  </general_principles>
+
+  <dom_contract>
+    - Never select DOM nodes using CSS styling classes (BEM/utilities/design classes).
+    - Prefer data-attributes as JS hooks:
+      - data-ref="..." for internal references
+      - data-action="..." for triggers
+      - data-component="..." for component roots (when needed)
+    - "ref" attributes are allowed for legacy compatibility, but prefer "data-ref" for new code.
+    - If a hook must be a class, it must be a JS-only hook with a "js-" prefix (e.g. .js-cart-drawer). Prefer data-* over js- classes.
+    - Avoid fragile selectors:
+      - Do not rely on DOM position (e.g. :nth-child, > div:nth-child(2))
+      - Do not rely on deep descendant chains
+    - When a required element is missing, fail gracefully:
+      - early return
+      - console.warn with enough context to debug (do not throw unless truly unrecoverable)
+  </dom_contract>
+
+  <idempotency_and_theme_editor_safety>
+    - All JS must be safe to run multiple times without:
+      - duplicating event listeners
+      - duplicating DOM nodes
+      - leaking timers/observers
+    - Prefer Custom Elements for initialization and lifecycle:
+      - Use connectedCallback() to initialize
+      - Use disconnectedCallback() to cleanup
+    - Cleanup strategy (choose one):
+      - AbortController for event listeners
+      - event delegation on a stable root
+    - Avoid global state. If shared state is needed, keep it in a small module with an explicit API.
+    - If a section re-renders (Theme Editor), the component must re-bind safely and remain functional.
+  </idempotency_and_theme_editor_safety>
+
+  <file_structure>
+    - Group scripts by feature area where appropriate.
+      - Example: "collection.js" may contain multiple related classes used together on collection pages.
+    - Keep module boundaries clear: feature files export a small public API.
+  </file_structure>
+
+  <modules>
+    - Use the module pattern for loading JavaScript (ES modules). Avoid polluting the global scope.
+
+    <privacy_and_instance_methods>
+      - Keep the public API surface as small as possible.
+      - Use private class fields/methods (#) for internal instance logic.
+      - Do not use instance methods for functions that do not require instance state — make them module utilities instead.
+
+      <code>
+        class MyClass {
+          constructor() {
+            this.cache = new Map();
+            this._abortController = null;
+          }
+
+          connect() {
+            this._abortController?.abort();
+            this._abortController = new AbortController();
+            const { signal } = this._abortController;
+
+            const button = this.querySelector('[data-ref="button"]');
+            if (!button) return;
+
+            button.addEventListener('click', () => this.#onClick(), { signal });
+          }
+
+          disconnect() {
+            this._abortController?.abort();
+            this._abortController = null;
+          }
+
+          #onClick() {
+            // internal logic
+          }
+        }
+
+        const add = (a, b) => a + b;
+      </code>
+    </privacy_and_instance_methods>
+  </modules>
+
+  <asynchronous_code>
+    - Prefer "async/await".
+    - Prefer "await" over chaining ".then()".
+    - Handle errors explicitly (try/catch) where failures are expected (network, parsing, optional DOM).
+  </asynchronous_code>
+
+  <events>
+    - Use events to communicate between custom elements/components (avoid direct imports/dependencies).
+    - Prefer CustomEvent with a clear name and detail payload.
+    - Bubble events when appropriate so parent components can listen.
+  </events>
+
+  <web_components>
+    - Initialize UI behaviors via Custom Elements to survive Theme Editor re-renders.
+    - Default to Light DOM (no Shadow DOM) unless there is a clear isolation need.
+    - Shadow DOM is opt-in and allowed when it provides real benefit:
+      - prevents CSS collisions that are hard to avoid
+      - component is a self-contained widget
+      - component has a stable internal UI that should not be styled externally
+    - Slots are recommended for composition when a component needs flexible content structure.
+  </web_components>
+
+  <early_returns>
+    - Prefer early returns over nested conditionals.
+
+    <optional_chaining>
+      - If multiple optional chains would be needed, prefer an early return.
+      - Single optional chain usage is acceptable.
+
+      <code>
+        const button = this.querySelector('[data-ref="button"]');
+        if (!button) return;
+        button.textContent = 'Add to cart';
+
+        const maybeButton = this.querySelector('[data-ref="button"]');
+        maybeButton?.focus();
+      </code>
+    </optional_chaining>
+  </early_returns>
+
+  <simplification>
+    <ternaries>
+      - Use ternaries for simple if/else blocks where both the condition and bodies are simple.
+      <code>
+        simpleCondition ? this.doAThing() : this.doAnotherThing();
+      </code>
+    </ternaries>
+
+    <one_liners>
+      - Write simple conditional returns on one line.
+      <code>
+        if (simpleCondition) return;
+      </code>
+    </one_liners>
+
+    <returning_boolean>
+      - Return boolean comparisons directly rather than using ternaries.
+      <code>
+        return simpleCondition;
+      </code>
+    </returning_boolean>
+  </simplification>
+
+</frontend_javascript>
