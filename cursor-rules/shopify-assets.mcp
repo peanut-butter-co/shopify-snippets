@@ -16,7 +16,7 @@ alwaysApply: false
 
   <integration_with_liquid>
     - Reference assets via Liquid helpers:
-      - Prefer {{ 'file.js' | script_tag }} and {{ 'file.css' | stylesheet_tag }} where appropriate
+      - Prefer {{ 'file.js' | asset_url | script_tag }} and {{ 'file.css' | asset_url | stylesheet_tag }} where appropriate
       - Use {{ 'file.ext' | asset_url }} for URLs
       - Use inline_asset_content only when there is a clear reason (e.g. critical CSS / small snippets)
     - Prefer server-rendered HTML (Liquid) as the source of truth.
@@ -35,6 +35,9 @@ alwaysApply: false
     - Prefer patterns that survive re-render:
       - Custom elements / event-driven communication
       - Re-query DOM on connect / section load events if applicable
+    - Theme Editor notes:
+      - Prefer guarding editor-only behavior with Shopify.designMode when needed
+      - Be compatible with section lifecycle events (shopify:section:load/unload/select) when Custom Elements aren't an option
   </theme_editor_safety>
 
   <performance_and_dependencies>

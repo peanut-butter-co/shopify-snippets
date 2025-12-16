@@ -103,7 +103,7 @@ alwaysApply: false
 
     // localization
     { name: "currency_selector", usage: "form | currency_selector" },
-    { name: "translate", usage: "string | t" },
+    { name: "t", usage: "string | t" },
     { name: "format_address", usage: "address | format_address" },
 
     // customer
@@ -206,7 +206,7 @@ alwaysApply: false
   ]
   valid_tags = [
     // theme
-    "content_for", "layout", "include", "render", "javascript", "section", "stylesheet", "sections",
+    "layout", "include", "render", "javascript", "section", "stylesheet", "sections",
 
     // html
     "form", "style",
@@ -271,7 +271,7 @@ alwaysApply: false
   validation_rules = {
     syntax: {
       - Use {% liquid %} for multiline code
-      - Use {% # comments %} for inline comments
+      - Use {% comment %} for inline comments
       - Never invent new filters, tags, or objects without verification (theme codebase / Shopify MCP / official docs)
       - If not verified, stick to the whitelist
       - Follow proper tag closing order

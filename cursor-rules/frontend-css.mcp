@@ -22,7 +22,7 @@ alwaysApply: false
     - Prefer 0-1-0 specificity (a single class selector) wherever possible.
     - If higher specificity is needed due to parent/child state, keep it <= 0-4-0.
     - Avoid overly complex selectors; selectors should be readable at a glance.
-    - Don’t over do it with pseudo selectors (:has, :where, :nth-child, etc)”
+    - Don't overdo it with pseudo selectors (:has, :where, :nth-child, etc)
   </specificity>
 
   <scoping_and_components>
@@ -82,6 +82,7 @@ alwaysApply: false
     - Define :hover, :focus-visible, :active states for interactive elements.
     - Never remove focus outlines without providing an accessible alternative.
     - Keep state styles close to the component block and avoid cross-component dependencies.
+    - Respect user preferences: wrap non-essential motion in @media (prefers-reduced-motion: reduce) fallbacks.
   </states_and_interactions>
 
   <performance>

@@ -25,6 +25,7 @@ alwaysApply: false
       - data-ref="..." for internal references
       - data-action="..." for triggers
       - data-component="..." for component roots (when needed)
+      - Prefer data-state / aria-* for state (e.g. [data-state="open"], [aria-expanded="true"]) instead of toggling styling classes for behavior.
     - "ref" attributes are allowed for legacy compatibility, but prefer "data-ref" for new code.
     - If a hook must be a class, it must be a JS-only hook with a "js-" prefix (e.g. .js-cart-drawer). Prefer data-* over js- classes.
     - Avoid fragile selectors:
@@ -57,7 +58,7 @@ alwaysApply: false
   </file_structure>
 
   <modules>
-    - Use the module pattern for loading JavaScript (ES modules). Avoid polluting the global scope.
+    - Use the module pattern for loading JavaScript (scope modules, avoid globals). Use ES modules when the theme pipeline/runtime supports it.
 
     <privacy_and_instance_methods>
       - Keep the public API surface as small as possible.
