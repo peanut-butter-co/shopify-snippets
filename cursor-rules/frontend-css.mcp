@@ -1,0 +1,107 @@
+---
+description: Frontend CSS Rules — Peanut Butter standards for Shopify themes (CSS/SCSS).
+globs:
+  - assets/*.css
+  - assets/*/*.css
+  - src/**/*.css
+alwaysApply: false
+---
+
+<frontend_css>
+
+  <principles>
+    - Keep CSS simple, predictable, and component-scoped by default.
+    - Prefer native CSS features (custom properties, modern selectors) over complex abstractions.
+    - Optimize for maintainability: clear naming, low specificity, minimal nesting.
+  </principles>
+
+  <specificity>
+    - Never use IDs as selectors.
+    - Avoid element selectors as primary selectors (e.g. do not style "button" globally unless it's a reset).
+    - Avoid !important. If it is unavoidable, add a comment explaining why and what it overrides.
+    - Prefer 0-1-0 specificity (a single class selector) wherever possible.
+    - If higher specificity is needed due to parent/child state, keep it <= 0-4-0.
+    - Avoid overly complex selectors; selectors should be readable at a glance.
+    - Don’t over do it with pseudo selectors (:has, :where, :nth-child, etc)”
+  </specificity>
+
+  <scoping_and_components>
+    - Scope styles to a component root class (BEM block) whenever possible.
+    - Do not leak component styles globally.
+    - Prefer component-local variables (scoped custom properties) for variants/states.
+    - When styling sections/blocks in Shopify, avoid using section/block ID selectors.
+      - Prefer using CSS custom properties set inline from settings.
+  </scoping_and_components>
+
+  <variables>
+    - Use CSS custom properties to reduce redundancy and enable theme settings.
+    - Never hardcode brand colors; use theme tokens / color schemes.
+    - If hardcoding a value, create a variable first (e.g. --touch-target-size: 44px).
+    - Scope variables to components unless they must be global.
+    - Global variables belong in a single global entry (e.g. :root) and should be minimal.
+    - Component variables may reference global variables; avoid the inverse.
+    - Global variables should be in :root in snippets/theme-styles-variables.liquid if this file exists
+    - Use variables to reduce property assignment redundancy
+  </variables>
+
+  <naming_conventions>
+    - Use BEM naming:
+      - Block: .component
+      - Element: .component__element
+      - Modifier: .component--variant or .component__element--variant
+    - Use dashes between words (kebab-case).
+    - Do not use camelCase in class names.
+    - Prefer semantic names over presentational names:
+      - ✅ .product-card__price
+      - ❌ .text-small-red
+  </naming_conventions>
+
+  <nesting>
+    - Avoid nesting beyond 1 level in SCSS.
+    - Never use the "&" operator.
+    - Exceptions allowed:
+      - Media queries can be nested inside the component block.
+      - Parent state affecting child (keep readable and minimal).
+    - Prefer flat selectors over nested selector chains.
+  </nesting>
+
+  <media_queries>
+    - Mobile-first: use min-width queries by default.
+    - Use "screen" for media queries.
+    - Keep breakpoints consistent across the codebase (use variables/tokens).
+    - Avoid breakpoint-specific class variants unless necessary; prefer fluid layouts.
+  </media_queries>
+
+  <layout_and_spacing>
+    - Prefer modern layout primitives: flex, grid.
+    - Avoid layout “magic numbers”; use spacing tokens/variables.
+    - Ensure touch targets are >= 44px where applicable (buttons, inputs, interactive icons).
+  </layout_and_spacing>
+
+  <states_and_interactions>
+    - Define :hover, :focus-visible, :active states for interactive elements.
+    - Never remove focus outlines without providing an accessible alternative.
+    - Keep state styles close to the component block and avoid cross-component dependencies.
+  </states_and_interactions>
+
+  <performance>
+    - Avoid expensive selectors (deep descendant chains, overly broad selectors).
+    - Avoid large reflow triggers where possible.
+    - Prefer translating/opacity for animations; avoid animating layout properties.
+  </performance>
+
+  <file_organization>
+    - Group styles by feature/component.
+    - Keep one component per file when reasonable.
+    - Avoid giant "global.scss" files; keep globals minimal (resets, tokens, utilities).
+  </file_organization>
+
+  <shopify_theme_integration>
+    - Prefer CSS variables for section/block settings:
+      - Set custom properties inline (via style attribute) and consume them in component CSS.
+    - Avoid using section.id / block.id selectors for styling.
+    - Keep CSS compatible with SSR: do not rely on JS to “fix” layout on load.
+    - Prefer using {% stylesheet %} tags in sections/blocks/snippets
+  </shopify_theme_integration>
+
+</frontend_css>
