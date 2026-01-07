@@ -1,0 +1,40 @@
+{%- assign max_labels = 2 -%}
+{%- assign shown_labels = 0 -%}
+
+{%- capture product_badges -%}
+  {%- comment -%}1. Sold out tiene máxima prioridad{%- endcomment -%}
+  {%- if settings.card_show_sold_out_badge and product.selected_or_first_available_variant.available == false  -%}
+    <li class="c-label c-label--sold-out">
+      {{- 'products.product.sold_out' | t -}}
+    </li>
+    {%- assign shown_labels = shown_labels | plus: 1 -%}
+  {%- endif -%}
+  {%- comment -%}3. Agregar stickers 
+   personalizados hasta completar max_labels{%- endcomment -%}
+  {%- if settings.card_show_label -%}
+    {%- assign product_badges = product.metafields.custom.product_badges.value | sort_natural: 'jerarquia' -%}
+
+    {%- for label in product_badges -%}
+      {%- if shown_labels < max_labels -%}
+        <li class="c-label" style="background-color: {{label.background.value}}; color: {{label.text_color.value}}; border-color: {{label.border_color.value}}">
+          {{- label.text.value -}}
+        </li>
+        {%- assign shown_labels = shown_labels | plus: 1 -%}
+      {%- else -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- capture product_badges -%}
+  {%- unless product_badges == empty -%}
+    <ul class="c-labels">  
+      {{ product_badges }}
+    </ul>
+  {%- endunless -%}
+{%- endcapture -%}
+
+<div class="c-cp__labels">
+    {{ product_badges }}
+</div>

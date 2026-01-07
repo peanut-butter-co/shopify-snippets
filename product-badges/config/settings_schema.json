@@ -1,0 +1,15 @@
+{
+  "badges": {
+    "display" : "Display",
+    "none": "None",
+    "overlay-image": "Overlay image",
+    "below-image": "Below Image",
+    "style": "Style",
+    "primary": "Primary",
+    "secondary": "Secondary",
+    "text": "Text",
+    "show-sale-label": "Show Sale Label",
+    "show-label": "Show Custom Labels",
+    "show-sold-out-badge": "Show Sold out Label"
+  }
+}
