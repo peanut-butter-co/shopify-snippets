@@ -1,10 +1,14 @@
 {%- liquid 
-  assign breadcrumbs_collection = product.metafields.custom.main_category.value.handle
-  assign finished = false
-  assign highest_level = 1 
-  assign menu = settings.breadcrumbs_menu
--%}
-
+    assign breadcrumbs_collection = product.metafields.custom.main_category.value.handle
+    if breadcrumbs_collection == blank
+      assign breadcrumbs_collection = shop.metafields.custom.main_category.value.handle
+    endif
+    assign finished = false
+    assign highest_level = 1 
+    assign menu = settings.breadcrumbs_menu
+  -%}
+  
+  
 {%- unless breadcrumbs_collection == blank -%}
   {%- comment -%}
     LEVEL 1
@@ -116,6 +120,14 @@
       {% unless breadcrumbs_level_4 == blank %}<span class="breadcrumbs__separator">{{ settings.breadcrumbs_separator }}</span>{% endunless %} 
       {{ breadcrumbs_level_4 }}
     {%- endif -%}
-  {% endif %}
 
+    {%- comment -%}
+      PRODUCT TITLE (FINAL LEVEL)
+    {%- endcomment -%}
+    {% unless product.title == blank or settings.breadcrumbs_show_product_title == false %}
+      <span class="breadcrumbs__separator">{{ settings.breadcrumbs_separator }}</span>
+      <span class="breadcrumbs__item breadcrumbs__item--current">{{ product.title | escape }}</span>
+    {% endunless %}
+  {% endif %}
+  
 {%- endunless -%}
