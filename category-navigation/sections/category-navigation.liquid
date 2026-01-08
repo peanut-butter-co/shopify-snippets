@@ -1,0 +1,68 @@
+<div class="category-navigation--{{ section.id }} category-navigation__wrapper">
+  {% render 'category-navigation', section: section %}
+</div>
+
+{% schema %}
+{
+  "name": "Category navigation",
+  "class": "section-category-navigation",
+  "enabled_on": {
+    "templates": ["collection"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Category navigation"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "info": "The menu that will be used to define the hierarchy"
+    },
+    {
+      "type": "select",
+      "id": "view_all_position",
+      "label": "\"View all\" position",
+      "options": [
+        {
+          "value": "first",
+          "label": "First"
+        },
+        {
+          "value": "last",
+          "label": "Last"
+        }
+      ],
+      "default": "first"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_view_all",
+      "label": "Hide view all",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "view_all_image",
+      "label": "View all image",
+      "info": "Image to display for the 'View all' link"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_siblings",
+      "label": "Show sibling categories",
+      "info": "When a category does not have subcategories, show categories of the same level",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Category navigation",
+      "category": "Navigation"
+    }
+  ]
+}
+{% endschema %}
+
+

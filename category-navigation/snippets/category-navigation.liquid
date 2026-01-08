@@ -2,7 +2,7 @@
   LEVEL 1
 {%- endcomment -%}
 {% liquid
-    assign menu = section.settings["menu"]
+    assign menu = section.settings.menu
     assign found = false
     assign childs_menu = ''
     assign siblings_menu = ''
@@ -13,6 +13,7 @@
   {%- if found -%}
     {% break %}
   {%- endif -%}
+
   {% if link_level_1.child_active or link_level_1.active %}
     {%- if link_level_1.active -%}
       {%- assign current_level = 1 -%}
@@ -23,7 +24,7 @@
       {%- assign child_count = link_level_1.links | size -%}
       {%- if child_count > 0 -%}
         {%- capture childs_menu -%}
-          {%- render 'category-navigation-items', parent: link_level_1, view_all_position: section.settings.view_all_position, hide_view_all: section.settings.hide_view_all -%}
+          {%- render 'category-navigation-items', parent: link_level_1, view_all_position: section.settings.view_all_position, hide_view_all: section.settings.hide_view_all, view_all_image: section.settings.view_all_image -%}
         {%- endcapture -%}
       {%- endif -%}
       {%- comment -%}Set found as true so we can break out of all loops{%- endcomment -%}
@@ -32,7 +33,7 @@
     {%- comment -%}We store the parent's childs in case we have to show the siblings{%- endcomment -%}
     {%- elsif section.settings.show_siblings and link_level_1.child_active -%}
       {%- capture siblings_menu -%}
-        {%- render 'category-navigation-items', parent: link_level_1, view_all_position: section.settings.view_all_position, hide_view_all: section.settings.hide_view_all -%}
+        {%- render 'category-navigation-items', parent: link_level_1, view_all_position: section.settings.view_all_position, hide_view_all: section.settings.hide_view_all, view_all_image: section.settings.view_all_image -%}
       {%- endcapture -%}
     {%- endif -%}
 
@@ -54,7 +55,7 @@
           {%- assign child_count = link_level_2.links | size -%}
           {%- if child_count > 0 -%}
             {%- capture childs_menu -%}
-              {%- render 'category-navigation-items', parent: link_level_2, view_all_position: section.settings.view_all_position, hide_view_all: section.settings.hide_view_all -%}
+              {%- render 'category-navigation-items', parent: link_level_2, view_all_position: section.settings.view_all_position, hide_view_all: section.settings.hide_view_all, view_all_image: section.settings.view_all_image -%}
             {%- endcapture -%}
           {%- endif -%}
           {%- comment -%}Set found as true so we can break out of all loops{%- endcomment -%}
@@ -63,7 +64,7 @@
         {%- comment -%}We store the parent's childs in case we have to show the siblings{%- endcomment -%}
         {%- elsif section.settings.show_siblings and link_level_2.child_active -%}
           {%- capture siblings_menu -%}
-            {%- render 'category-navigation-items', parent: link_level_2, view_all_position: section.settings.view_all_position, hide_view_all: section.settings.hide_view_all -%}
+            {%- render 'category-navigation-items', parent: link_level_2, view_all_position: section.settings.view_all_position, hide_view_all: section.settings.hide_view_all, view_all_image: section.settings.view_all_image -%}
           {%- endcapture -%}
         {%- endif -%}
     
@@ -85,7 +86,7 @@
               {%- assign child_count = link_level_3.links | size -%}
               {%- if child_count > 0 -%}
                 {%- capture childs_menu -%}
-                  {%- render 'category-navigation-items', parent: link_level_3, view_all_position: section.settings.view_all_position, hide_view_all: section.settings.hide_view_all -%}
+                  {%- render 'category-navigation-items', parent: link_level_3, view_all_position: section.settings.view_all_position, hide_view_all: section.settings.hide_view_all, view_all_image: section.settings.view_all_image -%}
                 {%- endcapture -%}
               {%- endif -%}
               {%- comment -%}Set found as true so we can break out of all loops{%- endcomment -%}
@@ -94,7 +95,7 @@
             {%- comment -%}We store the parent's childs in case we have to show the siblings{%- endcomment -%}
             {%- elsif section.settings.show_siblings and link_level_3.child_active -%}
               {%- capture siblings_menu -%}
-                {%- render 'category-navigation-items', parent: link_level_3, view_all_position: section.settings.view_all_position, hide_view_all: section.settings.hide_view_all -%}
+                {%- render 'category-navigation-items', parent: link_level_3, view_all_position: section.settings.view_all_position, hide_view_all: section.settings.hide_view_all, view_all_image: section.settings.view_all_image -%}
               {%- endcapture -%}
             {%- endif -%}
 
@@ -112,7 +113,7 @@
                   {%- assign child_count = link_level_4.links | size -%}
                   {%- if child_count > 0 -%}
                     {%- capture childs_menu -%}
-                      {%- render 'category-navigation-items', parent: link_level_4, view_all_position: section.settings.view_all_position, hide_view_all: section.settings.hide_view_all -%}
+                      {%- render 'category-navigation-items', parent: link_level_4, view_all_position: section.settings.view_all_position, hide_view_all: section.settings.hide_view_all, view_all_image: section.settings.view_all_image -%}
                     {%- endcapture -%}
                   {%- endif -%}
                   {%- comment -%}Set found as true so we can break out of all loops{%- endcomment -%}
@@ -121,7 +122,7 @@
                 {%- comment -%}We store the parent's childs in case we have to show the siblings{%- endcomment -%}
                 {%- elsif section.settings.show_siblings and link_level_4.child_active -%}
                   {%- capture siblings_menu -%}
-                    {%- render 'category-navigation-items', parent: link_level_4, view_all_position: section.settings.view_all_position, hide_view_all: section.settings.hide_view_all -%}
+                    {%- render 'category-navigation-items', parent: link_level_4, view_all_position: section.settings.view_all_position, hide_view_all: section.settings.hide_view_all, view_all_image: section.settings.view_all_image -%}
                   {%- endcapture -%}
                 {%- endif -%}
               {% endif %}
@@ -138,3 +139,4 @@
 {%- elsif siblings_menu != blank and current_level > 1 -%}
   {{ siblings_menu }}
 {%- endif -%}
+

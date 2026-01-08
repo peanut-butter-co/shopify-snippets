@@ -1,0 +1,168 @@
+
+<ul class="c-category-nav__list" data-subcategory-nav data-current-collection="{{ collection.title }}">
+    {%- if parent.current -%}
+      {%- assign current_class = "c-category-nav__link--active" -%}
+    {%- else -%}
+      {%- assign current_class = "" -%} 
+    {%- endif -%}
+  
+    {%- unless hide_view_all -%}
+      {% if view_all_position == "first" %}
+        <li class="c-category-nav__item" data-item-title="{{ 'sections.category_navigation.view_all' | t }}">
+          <a class="c-category-nav__link {{ current_class }}" href="{{ parent.url }}">
+            {%- if view_all_image != blank -%}
+              <div class="c-category-nav__image-wrapper">
+                {{ view_all_image | image_url: width: 800 | image_tag: loading: 'lazy', class: 'c-category-nav__image', sizes: 'auto' }}
+              </div>
+            {%- endif -%}
+            <span class="c-category-nav__title">{{ 'sections.category_navigation.view_all' | t }}</span>
+          </a>
+        </li>
+      {% endif %}
+    {%- endunless -%}
+  
+    {% for child in parent.links %}
+      {%- if child.current -%}
+        {%- assign current_class = "c-category-nav__link--active" -%}
+      {%- else -%}
+        {%- assign current_class = "" -%} 
+      {%- endif -%}
+      <li class="c-category-nav__item" data-item-title="{{ child.title }}">
+        <a class="c-category-nav__link {{ current_class }}" href="{{ child.url }}">
+          {%- if child.type == 'collection_link' and child.object.featured_image -%}
+            <div class="c-category-nav__image-wrapper">
+              {{ child.object.featured_image | image_url: width: 800 | image_tag: loading: 'lazy', class: 'c-category-nav__image', sizes: 'auto' }}
+            </div>
+          {%- elsif child.type == 'collection_link' and child.object.products.size > 0 -%}
+            {%- assign product_with_image = child.object.products | where: 'featured_image' | first -%}
+            {%- if product_with_image.featured_image -%}
+              <div class="c-category-nav__image-wrapper">
+                {{ product_with_image.featured_image | image_url: width: 800 | image_tag: loading: 'lazy', class: 'c-category-nav__image', sizes: 'auto' }}
+              </div>
+            {%- endif -%}
+          {%- endif -%}
+          <span class="c-category-nav__title">{{ child.title }}</span>
+        </a>
+      </li>
+    {% endfor %}
+  
+    {%- if parent.current -%}
+      {%- assign current_class = "c-category-nav__link--active" -%}
+    {%- else -%}
+      {%- assign current_class = "" -%} 
+    {%- endif -%}
+  
+    {%- unless hide_view_all -%}
+      {% if view_all_position == "last" %}
+        <li class="c-category-nav__item" data-item-title="{{ 'sections.category_navigation.view_all' | t }}">
+          <a class="c-category-nav__link {{ current_class }}" href="{{ parent.url }}">
+            {%- if view_all_image != blank -%}
+              <div class="c-category-nav__image-wrapper">
+                {{ view_all_image | image_url: width: 800 | image_tag: loading: 'lazy', class: 'c-category-nav__image', sizes: 'auto' }}
+              </div>
+            {%- endif -%}
+            <span class="c-category-nav__title">{{ 'sections.category_navigation.view_all' | t }}</span>
+          </a>
+        </li>
+      {% endif %}
+    {%- endunless -%}
+  </ul>
+
+{% stylesheet %}
+  .c-category-nav__link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .c-category-nav__image-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 0.5rem;
+  }
+
+  .c-category-nav__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .c-category-nav__link:hover .c-category-nav__image,
+  .c-category-nav__link:focus .c-category-nav__image {
+    transform: scale(1.05);
+  }
+
+  .c-category-nav__title {
+    display: block;
+    text-align: center;
+    font-weight: 500;
+  }
+
+  /** Category navigation image wrapper styles */
+  .c-category-nav__list {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+
+  .c-category-nav__item {
+    flex-shrink: 0;
+    min-width: 180px; /* Touch target mínimo según WCAG 2.5.8 */
+  }
+
+  .c-category-nav__image-wrapper {
+    width: 180px;
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa; /* Fondo neutral para imágenes con transparencia */
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+
+  .c-category-nav__image-wrapper img {
+    object-fit: contain;
+    width: 180px;
+    height: 180px;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .c-category-nav__list {
+      gap: 16px;
+      padding-bottom: 8px; /* Espacio para scrollbar */
+    }
+    
+    .c-category-nav__item {
+      min-width: 150px;
+    }
+    
+    .c-category-nav__image-wrapper,
+    .c-category-nav__image-wrapper img {
+      width: 150px;
+      height: 150px;
+    }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    .c-category-nav__link:hover .c-category-nav__image,
+    .c-category-nav__link:focus .c-category-nav__image {
+      transform: none;
+    }
+  }
+{% endstylesheet %}
